@@ -482,16 +482,17 @@ export default class VideoRecorder extends Component {
   }
 
   handleStartRecording = () => {
-    if (this.props.onStartRecording) {
-      this.props.onStartRecording()
-    }
-
     this.setState({
       isRunningCountdown: true,
       isReplayingVideo: false
     })
 
-    setTimeout(() => this.startRecording(), this.props.countdownTime)
+    setTimeout(() => {
+      this.startRecording()
+      if (this.props.onStartRecording) {
+        this.props.onStartRecording()
+      }
+    }, this.props.countdownTime)
   }
 
   startRecording = () => {
@@ -607,7 +608,7 @@ export default class VideoRecorder extends Component {
       const decoder = new Decoder()
       let elements = decoder.decode(buffer)
       // see https://github.com/legokichi/ts-ebml/issues/33#issuecomment-888800828
-      const validEmlType = ['m', 'u', 'i', 'f', 's', '8', 'b', 'd'];
+      const validEmlType = ['m', 'u', 'i', 'f', 's', '8', 'b', 'd']
       elements = elements?.filter((elm) => validEmlType.includes(elm.type))
 
       const reader = new Reader()
