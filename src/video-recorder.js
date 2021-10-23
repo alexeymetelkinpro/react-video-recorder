@@ -209,6 +209,14 @@ export default class VideoRecorder extends Component {
   componentWillUnmount () {
     this.turnOffCamera()
     this.isComponentUnmounted = true
+
+    if (this.countdownTimer) {
+      clearInterval(this.countdownTimer)
+    }
+
+    if (this.timeLimitTimeout) {
+      clearInterval(this.timeLimitTimeout)
+    }
   }
 
   turnOnCamera = (deviceId = null) => {
@@ -487,7 +495,7 @@ export default class VideoRecorder extends Component {
       isReplayingVideo: false
     })
 
-    setTimeout(() => {
+    this.countdownTimer = setTimeout(() => {
       this.startRecording()
       if (this.props.onStartRecording) {
         this.props.onStartRecording()
